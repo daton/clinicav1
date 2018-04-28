@@ -28,7 +28,7 @@ public class Clinicav1Application implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 
 
-		mongoTemplate.save(new Mensaje("Lluvia"));
+		//mongoTemplate.save(new Mensaje("Lluvia"));
 
 		System.out.println("harto");
 
