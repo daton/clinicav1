@@ -2,27 +2,102 @@ package org.unitec.clinicav1;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.util.Collections;
 
 @RestController
 @RequestMapping("/api")
 public class ControladorMensaje {
 
-@Autowired MensajeMongo mongo;
+    @Autowired
+    RepoMongo repoMongo;
+
+    /*
+    GET TODOS
+     */
+    @GetMapping("/mensaje")
+    Flux<Mensaje> getTodos() {
+
+
+
+        Flux<Mensaje> flux= Flux.fromIterable(repoMongo.findAll());
+        System.out.println("SE activo el metodo get todos");
+         flux.subscribe();
+        return flux.map(it -> it);
+    }
+
+
+    /*
+    Buscar por Id
+     */
+
+    @GetMapping("/mensaje/{id}")
+    Mono<Mensaje> getPorId(@PathVariable String id) {
+
+
+        Mono<Mensaje> monito =Mono.just(repoMongo.findById(id).get());
+        System.out.println("SE activo el metodo get todos");
+        monito.subscribe();
+        return monito.map(it -> it);
+    }
+
+
+
+    /*
+
+    Post para insertar
+     */
+
     @PostMapping(path="/mensaje",consumes = "application/json")
-    Estatus getPorId(@RequestBody Mensaje mensa)throws Exception{
+    Mono<Estatus>  getPorId(@RequestBody Mensaje mensa)throws Exception{
 
         System.out.println("Lo que llego "+mensa);
 
-       mongo.save(mensa);
+        repoMongo.save(mensa);
         System.out.println("Deespues de la supuesta insercion");
-
         Estatus estatus=new Estatus("maloooos ", true);
-
-        return estatus;
+        Mono<Estatus> monito=Mono.just(new Estatus("bien todo", true));
+        monito.subscribe();
+        return monito.map(este->este);
     }
+
+    /*
+    ACTUALIZAR
+     */
+    @PutMapping(path = "/mensaje" , consumes = "application/json")
+    Mono<Estatus> actualizar(@RequestBody Mensaje mensa)throws Exception{
+
+        System.out.println("LLego bien "+mensa);
+        Mensaje men=mensa;
+        repoMongo.save(mensa);
+        Mono<Estatus> monito=Mono.just(new Estatus("Mensaje Actualizado", true));
+            monito.subscribe();
+        return monito.map(topo->topo);
+    }
+
+
+    /*
+    BORRAR CON SOLO REACTIVO
+     */
+
+
+
+    @DeleteMapping("/mensaje")
+    Mono<Estatus> borrarPorId(@RequestBody Mensaje mensa) {
+
+
+      repoMongo.delete(mensa);
+        System.out.println("SE  va a borrar un registro");
+        Estatus estatus=new Estatus("maloooos ", true);
+        Mono<Estatus> monito=Mono.just(new Estatus("bien todo", true));
+
+        monito.subscribe();
+        return monito.map(it -> it);
+    }
+
+
 
 }

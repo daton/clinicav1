@@ -5,6 +5,7 @@ import com.mongodb.MongoClientURI;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 
@@ -25,10 +26,12 @@ public class MongConf {
         return mongoTemplate;
     }
 
+
     /*
     @Bean
     public GridFsTemplate gridFsTemplate()throws Exception{
         return new GridFsTemplate(mongoDbFactory(),mappingMongoConverter());
     }
     */
+
 }

@@ -12,6 +12,14 @@ public class Mensaje {
 
     String titulo;
 
+    @Override
+    public String toString() {
+        return "Mensaje{" +
+                "id='" + id + '\'' +
+                ", titulo='" + titulo + '\'' +
+                '}';
+    }
+
     public Mensaje(String titulo) {
         this.titulo = titulo;
     }
